@@ -17,7 +17,8 @@ export async function bundle(root: string) {
         input: isServer ? SERVER_ENTRY_PATH : CLIENT_ENTRY_PATH,
         output: {
           format: isServer ? 'cjs' : 'esm'
-        }
+        },
+        external: ['island:site-data']
       }
     }
   });
