@@ -1,0 +1,8 @@
+node_modules
+dist
+bin
+package.json
+tsconfig.json
+.eslintrc.cjs
+pnpm-lock.yaml
+docs
