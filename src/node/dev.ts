@@ -7,12 +7,14 @@ import { log } from 'console';
 import { pluginConfig } from './island-plugin/config';
 
 // https://vitejs.dev/config/
-export async function createDevServer(root: string) {
+export async function createDevServer(
+  root: string,
+  restart: () => Promise<void>
+) {
   const config = await resolveConfig(root, 'serve', 'development');
-  log(config);
   return createServer({
     root,
-    plugins: [react(), pluginIndexHtml(), pluginConfig(config)],
+    plugins: [react(), pluginIndexHtml(), pluginConfig(config, restart)],
     server: {
       fs: {
         allow: [PACKAGE_ROOT]

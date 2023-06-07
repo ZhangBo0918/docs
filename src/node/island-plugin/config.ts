@@ -1,9 +1,13 @@
 import { SiteConfig } from 'shared/types';
 import { Plugin } from 'vite';
+import { resolve } from 'path';
 
 const SITE_DATA_ID = 'island:site-data';
 
-export function pluginConfig(config: SiteConfig): Plugin {
+export function pluginConfig(
+  config: SiteConfig,
+  restart: () => Promise<void>
+): Plugin {
   return {
     name: 'island:site-data',
     resolveId(id) {
@@ -17,14 +21,15 @@ export function pluginConfig(config: SiteConfig): Plugin {
       }
     },
     async handleHotUpdate(ctx) {
-      const customWatchFiles = [config.configPath];
+      const customWatchFiles = [resolve(config.configPath || '')];
       const include = (id: string) =>
         customWatchFiles.some((file) => id.includes(file as string));
-      if (include(ctx.file)) {
+      if (include(resolve(ctx.file))) {
         console.log('该更新了');
         // 在配置数据更新后，需要重启Dev Server
         // 1. 重启vite的server，无效果，因为没读取配置
         // 2. 重启dev.ts的createServer
+        await restart();
       }
     }
   };
